@@ -1,20 +1,18 @@
-# SPDX-FileCopyrightText: 2020-2023 Greenbone AG
+# SPDX-FileCopyrightText: 2024 Greenbone AG
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-#
 
-from .__version__ import __version__
-from ._calculator import VersionCalculator
-from ._errors import VersionError
-from ._main import main
-from ._version import ParseVersionFuncType, Version, VersionUpdate
+from pontos.version.version import Version
+from pontos.version.calculator import VersionCalculator
+from pontos.version.scheme import BumpType, bump_version, parse_version
+from pontos.version.changelog import ChangelogBuilder, ChangelogEntry
 
-__all__ = (
-    "__version__",
-    "VersionError",
-    "ParseVersionFuncType",
+__all__ = [
     "Version",
     "VersionCalculator",
-    "VersionUpdate",
-    "main",
-)
+    "BumpType",
+    "bump_version",
+    "parse_version",
+    "ChangelogBuilder",
+    "ChangelogEntry",
+]
