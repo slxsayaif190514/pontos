@@ -48,16 +48,23 @@ def tag_exists(version: Version) -> bool:
     return str(version) in get_git_tags()
 
 
-def create_tag(version: Version, message: Optional[str] = None) -> bool:
+def create_tag(version: Version, message: Optional[str] = None, sign: bool = False) -> bool:
     """Create an annotated git tag for the given version.
+
+    Args:
+        version: The version to tag.
+        message: Optional custom tag message. Defaults to 'Release <version>'.
+        sign: If True, create a GPG-signed tag instead of a regular annotated tag.
 
     Returns True on success, False otherwise.
     """
     tag = str(version)
     msg = message or f"Release {tag}"
+    # Use -s for signed tags, -a for regular annotated tags
+    flag = "-s" if sign else "-a"
     try:
         subprocess.run(
-            ["git", "tag", "-a", tag, "-m", msg],
+            ["git", "tag", flag, tag, "-m", msg],
             capture_output=True,
             check=True,
         )
