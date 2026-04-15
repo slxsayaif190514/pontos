@@ -37,6 +37,11 @@ class TestVersion:
         v = Version(1, 2, 3)
         assert v.next_major() == Version(2, 0, 0)
 
+    def test_next_patch_from_dev_version(self):
+        # dev versions should bump to the release, not increment patch further
+        v = Version(1, 2, 3, dev="dev0")
+        assert v.next_patch() == Version(1, 2, 4)
+
 
 class TestParseVersion:
     def test_simple_version(self):
@@ -62,3 +67,8 @@ class TestParseVersion:
     def test_zero_version(self):
         v = parse_version("0.0.0")
         assert v == Version(0, 0, 0)
+
+    def test_large_version_numbers(self):
+        # just making sure there's no int overflow or weird edge cases
+        v = parse_version("100.200.300")
+        assert v == Version(100, 200, 300)
