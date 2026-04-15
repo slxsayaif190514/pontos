@@ -26,7 +26,9 @@ class TestVersionCalculator(unittest.TestCase):
     def test_next_dev_from_release(self):
         calc = VersionCalculator(Version(1, 2, 3))
         result = calc.next_dev()
-        self.assertEqual(result, Version(1, 2, 4, devself.assertTrue(result.is_dev_version())
+        # next dev from a release should bump patch and set dev=1
+        self.assertEqual(result, Version(1, 2, 4, dev=1))
+        self.assertTrue(result.is_dev_version())
 
     def test_next_dev_from_dev(self):
         calc = VersionCalculator(Version(1, 2, 3, dev=1))
