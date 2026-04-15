@@ -25,6 +25,16 @@ class TestBumpVersion(unittest.TestCase):
         result = bump_version(v, BumpType.DEV)
         self.assertTrue(result.is_dev_version())
 
+    def test_bump_patch_from_zero(self):
+        # edge case: bumping patch on a fresh major version
+        v = Version(2, 0, 0)
+        self.assertEqual(bump_version(v, BumpType.PATCH), Version(2, 0, 1))
+
+    def test_bump_minor_resets_patch(self):
+        # make sure patch resets to 0 when bumping minor
+        v = Version(1, 2, 9)
+        self.assertEqual(bump_version(v, BumpType.MINOR), Version(1, 3, 0))
+
     def test_bump_type_values(self):
         self.assertEqual(BumpType.PATCH.value, "patch")
         self.assertEqual(BumpType.MINOR.value, "minor")
@@ -53,3 +63,8 @@ class TestParseVersion(unittest.TestCase):
     def test_parse_with_whitespace(self):
         v = parse_version("  2.0.0  ")
         self.assertEqual(v, Version(2, 0, 0))
+
+    def test_parse_zero_version(self):
+        # 0.0.0 is a valid version and should parse without errors
+        v = parse_version("0.0.0")
+        self.assertEqual(v, Version(0, 0, 0))
