@@ -29,6 +29,10 @@ class Version:
             return f"{base}.{self.dev}"
         return base
 
+    def __repr__(self) -> str:
+        # nicer repr for debugging in the repl
+        return f"Version('{self}')"
+
     def is_dev_version(self) -> bool:
         """Return True if this is a development version."""
         return self.dev is not None
