@@ -69,5 +69,8 @@ def create_tag(version: Version, message: Optional[str] = None, sign: bool = Fal
             check=True,
         )
         return True
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        # Print stderr so it's easier to debug failures locally
+        if e.stderr:
+            print(f"git tag failed: {e.stderr.decode().strip()}")
         return False
