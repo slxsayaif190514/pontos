@@ -47,6 +47,9 @@ def parse_version(version_string: str) -> Version:
 
     Supports formats like ``1.2.3`` and ``1.2.3.dev1``.
 
+    Also accepts a leading 'v' prefix (e.g. ``v1.2.3``), which is stripped
+    before parsing. This is handy when working with git tags.
+
     Args:
         version_string: A PEP-440 compatible version string.
 
@@ -56,7 +59,10 @@ def parse_version(version_string: str) -> Version:
     Raises:
         ValueError: If the string cannot be parsed.
     """
-    parts = version_string.strip().split(".")
+    # strip leading 'v' so git-style tags like v1.2.3 work too
+    version_string = version_string.strip().lstrip("v")
+
+    parts = version_string.split(".")
     try:
         if len(parts) == 3:
             major, minor, patch = int(parts[0]), int(parts[1]), int(parts[2])
