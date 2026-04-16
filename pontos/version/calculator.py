@@ -28,7 +28,7 @@ class VersionCalculator:
         """Return the next major version."""
         return self._current.next_major()
 
-    def next_dev(self, start: int = 1) -> Version:
+    def next_dev(self, start: int = 0) -> Version:
         """Return the next dev version based on the current version.
 
         If the current version is already a dev version, increment the
@@ -37,7 +37,7 @@ class VersionCalculator:
 
         Args:
             start: The starting dev number when creating a new dev version
-                   (defaults to 1).
+                   (defaults to 0, so first dev version is e.g. 1.2.3.dev0).
         """
         if self._current.is_dev_version():
             dev = (self._current.dev or 0) + 1
