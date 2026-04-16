@@ -72,5 +72,8 @@ def create_tag(version: Version, message: Optional[str] = None, sign: bool = Fal
     except subprocess.CalledProcessError as e:
         # Print stderr so it's easier to debug failures locally
         if e.stderr:
-            print(f"git tag failed: {e.stderr.decode().strip()}")
+            # e.stderr is already a str because we didn't pass text=True above,
+            # but let's handle both bytes and str just in case
+            stderr_msg = e.stderr.decode().strip() if isinstance(e.stderr, bytes) else e.stderr.strip()
+            print(f"git tag failed: {stderr_msg}")
         return False
