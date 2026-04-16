@@ -35,6 +35,11 @@ class TestBumpVersion(unittest.TestCase):
         v = Version(1, 2, 9)
         self.assertEqual(bump_version(v, BumpType.MINOR), Version(1, 3, 0))
 
+    def test_bump_major_resets_minor_and_patch(self):
+        # also verify that minor resets to 0 when bumping major
+        v = Version(1, 5, 7)
+        self.assertEqual(bump_version(v, BumpType.MAJOR), Version(2, 0, 0))
+
     def test_bump_type_values(self):
         self.assertEqual(BumpType.PATCH.value, "patch")
         self.assertEqual(BumpType.MINOR.value, "minor")
@@ -68,3 +73,8 @@ class TestParseVersion(unittest.TestCase):
         # 0.0.0 is a valid version and should parse without errors
         v = parse_version("0.0.0")
         self.assertEqual(v, Version(0, 0, 0))
+
+    def test_parse_large_version_numbers(self):
+        # just making sure there's no int overflow weirdness or anything
+        v = parse_version("100.200.300")
+        self.assertEqual(v, Version(100, 200, 300))
