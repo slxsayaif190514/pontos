@@ -28,12 +28,16 @@ class VersionCalculator:
         """Return the next major version."""
         return self._current.next_major()
 
-    def next_dev(self) -> Version:
+    def next_dev(self, start: int = 1) -> Version:
         """Return the next dev version based on the current version.
 
         If the current version is already a dev version, increment the
         dev segment. Otherwise, create a new dev version from the next
         patch release.
+
+        Args:
+            start: The starting dev number when creating a new dev version
+                   (defaults to 1).
         """
         if self._current.is_dev_version():
             dev = (self._current.dev or 0) + 1
@@ -48,7 +52,7 @@ class VersionCalculator:
             major=next_p.major,
             minor=next_p.minor,
             patch=next_p.patch,
-            dev=1,
+            dev=start,
         )
 
     def release_from_dev(self) -> Optional[Version]:
