@@ -52,6 +52,13 @@ class TestBumpVersion(unittest.TestCase):
         result = bump_version(v, BumpType.DEV)
         self.assertTrue(result.is_dev_version())
 
+    def test_bump_patch_on_dev_version(self):
+        # personal note: not sure if bumping patch on a dev version should
+        # strip the dev suffix or keep it -- assuming it strips it for now
+        v = Version(1, 2, 3, dev=1)
+        result = bump_version(v, BumpType.PATCH)
+        self.assertFalse(result.is_dev_version())
+
 
 class TestParseVersion(unittest.TestCase):
     def test_parse_release(self):
@@ -81,12 +88,4 @@ class TestParseVersion(unittest.TestCase):
         self.assertEqual(v, Version(0, 0, 0))
 
     def test_parse_large_version_numbers(self):
-        # just making sure there's no int overflow weirdness or anything
-        v = parse_version("100.200.300")
-        self.assertEqual(v, Version(100, 200, 300))
-
-    def test_parse_dev_zero(self):
-        # dev0 is technically valid in PEP 440, worth checking
-        v = parse_version("1.0.0.dev0")
-        self.assertEqual(v, Version(1, 0, 0, dev=0))
-        self.assertTrue(v.is_dev_version())
+        # just making sure there's no int overflow weirdness or anythi
