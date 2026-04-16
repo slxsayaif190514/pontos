@@ -42,12 +42,16 @@ class Version:
         return Version(self.major, self.minor, self.patch + 1)
 
     def next_minor(self) -> "Version":
-        """Return next minor version."""
+        """Return next minor version (resets patch to 0)."""
         return Version(self.major, self.minor + 1, 0)
 
     def next_major(self) -> "Version":
-        """Return next major version."""
+        """Return next major version (resets minor and patch to 0)."""
         return Version(self.major + 1, 0, 0)
+
+    def as_tuple(self) -> tuple:
+        """Return version as a (major, minor, patch) tuple. Handy for comparisons."""
+        return (self.major, self.minor, self.patch)
 
 
 def parse_version(version_string: str) -> Version:
